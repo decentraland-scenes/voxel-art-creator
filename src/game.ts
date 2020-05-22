@@ -5,7 +5,7 @@ export const addCubeSound = new Entity()
 addCubeSound.addComponent(new Transform())
 addCubeSound.getComponent(Transform).position = Camera.instance.position
 addCubeSound.addComponent(
-  new AudioSource(new AudioClip("sounds/navigationForward.mp3"))
+  new AudioSource(new AudioClip('sounds/navigationForward.mp3'))
 )
 engine.addEntity(addCubeSound)
 
@@ -13,7 +13,7 @@ export const removeCubeSound = new Entity()
 removeCubeSound.addComponent(new Transform())
 removeCubeSound.getComponent(Transform).position = Camera.instance.position
 removeCubeSound.addComponent(
-  new AudioSource(new AudioClip("sounds/navigationBackward.mp3"))
+  new AudioSource(new AudioClip('sounds/navigationBackward.mp3'))
 )
 engine.addEntity(removeCubeSound)
 
@@ -128,38 +128,28 @@ let cubesGroup: ComponentGroup = engine.getComponentGroup(Transform)
 
 class RaycastingSystem implements ISystem {
   update(dt: number) {
-    // Fixed ray
-    const ray: Ray = {
-      origin: fixedRayEntity.getComponent(Transform).position,
-      direction: Vector3.Forward(),
-      distance: 1000,
-    }
-
     // Ray from camera
     const rayFromCamera: Ray = PhysicsCast.instance.getRayFromCamera(1000)
 
     // For the camera ray, we cast a hit all
     PhysicsCast.instance.hitFirst(rayFromCamera, (raycastHitEntity) => {
       if (raycastHitEntity.didHit) {
-        for (let entity of cubesGroup.entities) {
-          
-          // Diagnostic logs
-          // log(raycastHitEntity.entity.meshName)
-          // log(raycastHitEntity.hitNormal)
+        // Diagnostic logs
+        // log(raycastHitEntity.entity.meshName)
+        // log(raycastHitEntity.hitNormal)
 
-          // Check entity exists i.e. not been deleted
-          if (engine.entities[raycastHitEntity.entity.entityId]) {
-            // Highlight
-            if (raycastHitEntity.entity.meshName != 'base_collider') {
-              selectedCubeID =
-                engine.entities[raycastHitEntity.entity.entityId].uuid
-              highlightFace(
-                engine.entities[raycastHitEntity.entity.entityId],
-                raycastHitEntity
-              )
-            } else {
-              highlightBase(raycastHitEntity)
-            }
+        // Check entity exists i.e. not been deleted
+        if (engine.entities[raycastHitEntity.entity.entityId]) {
+          // Highlight
+          if (raycastHitEntity.entity.meshName != 'base_collider') {
+            selectedCubeID =
+              engine.entities[raycastHitEntity.entity.entityId].uuid
+            highlightFace(
+              engine.entities[raycastHitEntity.entity.entityId],
+              raycastHitEntity
+            )
+          } else {
+            highlightBase(raycastHitEntity)
           }
         }
       } else {
