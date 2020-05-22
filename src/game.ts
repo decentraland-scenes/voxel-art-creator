@@ -186,7 +186,7 @@ function highlightBase(raycastHitEntity: RaycastHitEntity) {
   let y: number = Math.round(raycastHitEntity.hitPoint.y * 8) / 8
   let z: number = Math.round(raycastHitEntity.hitPoint.z * 8) / 8
   highlight.getComponent(Transform).position.x = x
-  highlight.getComponent(Transform).position.y = 0.12
+  highlight.getComponent(Transform).position.y = 0.11
   highlight.getComponent(Transform).position.z = z
   highlight.getComponent(Transform).scale.setAll(CUBE_SIZE)
 }
