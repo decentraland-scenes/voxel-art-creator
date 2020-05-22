@@ -216,10 +216,6 @@ function highlightFace(entity: IEntity, raycastHitEntity: RaycastHitEntity) {
 // Global button events
 const input = Input.instance
 
-input.subscribe('BUTTON_DOWN', ActionButton.POINTER, false, (): void => {
-  log('LMB Clicked')
-})
-
 input.subscribe('BUTTON_DOWN', ActionButton.PRIMARY, false, (): void => {
   log('E Key Pressed')
   setCubeColor()
