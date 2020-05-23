@@ -2,6 +2,9 @@
 
 Scene is deployed [here](https://play.decentraland.org/?position=-149%2C-146).
 
+_a screenshot of the magica cube running in preview._
+![screenshot](https://github.com/decentraland-scenes/magica-cube-example-scene/blob/master/screenshots/screenshot.png)
+
 ## Controls
 
 * Left Click to add cubes
