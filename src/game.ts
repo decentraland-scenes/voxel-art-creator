@@ -1,5 +1,5 @@
 import { Manager, materials, colors } from './manager'
-import { highlightMaterial, highlightedVoxelID } from './modules/highliter'
+import { highlightMaterial, highlightedVoxelID } from './modules/highlighter'
 
 // Global button events
 const input = Input.instance

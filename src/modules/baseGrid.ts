@@ -1,6 +1,6 @@
 import { Manager, materials } from '../manager'
 import { Voxel, VOXEL_SIZE } from './voxel'
-import { highlight } from './highliter'
+import { highlight } from './highlighter'
 import resources from '../resources'
 
 // Adds a voxel to the scene

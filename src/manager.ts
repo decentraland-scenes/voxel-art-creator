@@ -1,6 +1,10 @@
 import resources from './resources'
 import { Audio } from './modules/audio'
 
+/*
+ Manager for mode, color and sound
+*/
+
 // Sounds
 const addVoxelSound = new Audio(resources.sounds.addVoxel)
 const subtractVoxelSound = new Audio(resources.sounds.subtractVoxel)
