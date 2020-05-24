@@ -1,5 +1,4 @@
 // TODO: THIS ALL NEEDS TIDYING UP
-
 // Sounds
 export const addCubeSound = new Entity()
 addCubeSound.addComponent(new Transform())
@@ -142,12 +141,8 @@ class RaycastingSystem implements ISystem {
         if (engine.entities[raycastHitEntity.entity.entityId]) {
           // Highlight
           if (raycastHitEntity.entity.meshName != 'base_collider') {
-            selectedCubeID =
-              engine.entities[raycastHitEntity.entity.entityId].uuid
-            highlightFace(
-              engine.entities[raycastHitEntity.entity.entityId],
-              raycastHitEntity
-            )
+            selectedCubeID = raycastHitEntity.entity.entityId
+            highlightFace(engine.entities[selectedCubeID], raycastHitEntity)
           } else {
             highlightBase(raycastHitEntity)
           }
@@ -173,11 +168,8 @@ engine.addEntity(fixedRayEntity)
 function highlightBase(raycastHitEntity: RaycastHitEntity) {
   highlight.getComponent(Transform).rotation = Quaternion.Euler(90, 0, 0)
   let x: number = Math.round(raycastHitEntity.hitPoint.x * 8) / 8
-  let y: number = Math.round(raycastHitEntity.hitPoint.y * 8) / 8
   let z: number = Math.round(raycastHitEntity.hitPoint.z * 8) / 8
-  highlight.getComponent(Transform).position.x = x
-  highlight.getComponent(Transform).position.y = 0.11
-  highlight.getComponent(Transform).position.z = z
+  highlight.getComponent(Transform).position.set(x, 0.11, z)
   highlight.getComponent(Transform).scale.setAll(CUBE_SIZE)
 }
 
