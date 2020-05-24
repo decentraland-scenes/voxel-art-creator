@@ -1,6 +1,6 @@
-import { Manager, materials } from '../manager'
+import { Manager, Mode, materials } from '../manager'
 import { voxels, Voxel, VOXEL_SIZE } from './voxel'
-import { highlight } from './highlighter'
+import { picker } from './picker'
 import resources from '../resources'
 
 // Adds a voxel to the scene
@@ -32,8 +32,10 @@ baseGrid.addComponent(
 baseGrid.addComponent(
   new OnPointerDown(
     (e) => {
-      let transform = highlight.getComponent(Transform).position
-      addBaseVoxel(transform.x, VOXEL_SIZE / 2 + 0.1, transform.z) // Base grid height is 0.1
+      if (Manager.activeMode == Mode.Add) {
+        let transform = picker.getComponent(Transform).position
+        addBaseVoxel(transform.x, VOXEL_SIZE / 2 + 0.1, transform.z) // Base grid height is 0.1
+      }
     },
     {
       button: ActionButton.POINTER,

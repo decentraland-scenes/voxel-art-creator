@@ -1,4 +1,5 @@
-import { Manager, materials } from '../manager'
+import { Manager, Mode, materials, colors } from '../manager'
+import { pickedVoxelID, pickerMaterial } from './picker'
 
 export const VOXEL_SIZE = 0.25
 export const voxelsGroup: ComponentGroup = engine.getComponentGroup(Transform)
@@ -18,7 +19,7 @@ export class Voxel extends Entity {
       new OnPointerDown(
         (e) => {
           let position = this.getComponent(Transform).position
-          this.addVoxel(
+          this.editVoxel(
             position.x + e.hit.normal.x * VOXEL_SIZE,
             position.y + e.hit.normal.y * VOXEL_SIZE,
             position.z + e.hit.normal.z * VOXEL_SIZE
@@ -32,22 +33,52 @@ export class Voxel extends Entity {
     )
   }
 
-  // Adds a voxel to the scene
-  addVoxel(x: number, y: number, z: number) {
-    log('Voxel added')
-    Manager.playAddVoxelSound()
-    const voxel = new Voxel(
-      this.shape,
-      new Transform({
-        position: new Vector3(x, y, z),
-        scale: new Vector3(VOXEL_SIZE, VOXEL_SIZE, VOXEL_SIZE),
-      })
-    )
-    voxels.push(voxel)
-    voxel.addComponent(materials[Manager.colorIndex])
+  // Edit a voxel depending on what mode the user is in
+  editVoxel(x: number, y: number, z: number) {
+    switch (Manager.activeMode) {
+      case Mode.Add:
+        log('Voxel added')
+        Manager.playAddVoxelSound()
+        const voxel = new Voxel(
+          this.shape,
+          new Transform({
+            position: new Vector3(x, y, z),
+            scale: new Vector3(VOXEL_SIZE, VOXEL_SIZE, VOXEL_SIZE),
+          })
+        )
+        voxels.push(voxel)
+        voxel.addComponent(materials[Manager.colorIndex])
+        break
+      case Mode.Subtract:
+        this.subtractVoxel()
+        break
+      case Mode.EyeDrop:
+        this.eyeDropVoxel()
+        break
+      default:
+        break
+    }
   }
 
   // Subtract a voxel from the scene
   subtractVoxel(): void {
+    if (pickedVoxelID != null) {
+      engine.removeEntity(engine.entities[pickedVoxelID])
+      Manager.playSubtractVoxelSound()
+    }
+  }
+
+  // Eye drop a voxel from the scene
+  eyeDropVoxel(): void {
+    if (pickedVoxelID != null) {
+      let eyeDroppedVoxel = engine.entities[pickedVoxelID]
+      for (let i = 0; i < colors.length; i++) {
+        Manager.playEyeDropVoxelSound()
+        if (colors[i] == eyeDroppedVoxel.getComponent(Material).albedoColor) {
+          Manager.colorIndex = i
+          pickerMaterial.albedoColor = colors[Manager.colorIndex]
+        }
+      }
+    }
   }
 }

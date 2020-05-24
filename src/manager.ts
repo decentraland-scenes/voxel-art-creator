@@ -4,9 +4,18 @@ import { Audio } from './modules/audio'
 /*
  Manager for mode, color and sound
 */
-// Sounds
-const addVoxelSound = new Audio(resources.sounds.addVoxel)
-const subtractVoxelSound = new Audio(resources.sounds.subtractVoxel)
+
+// Mode
+export enum Mode {
+  Add = 0,
+  Subtract = 1,
+  EyeDrop = 2
+}
+
+// Sound entities
+const addVoxelSound = new Audio(resources.sounds.add)
+const subtractVoxelSound = new Audio(resources.sounds.subtract)
+const eyeDropVoxelSound = new Audio(resources.sounds.eyeDrop)
 
 // Colors to cycle through (7 main colours + white + black)
 export const colors: Color3[] = [
@@ -33,15 +42,24 @@ for (let i = 0; i < colors.length; i++) {
 }
 
 export class Manager {
-  public static colorIndex: number = 0
 
+  public static colorIndex: number = 0
+  public static activeMode = Mode.Add
+
+  // Sound
   public static playAddVoxelSound(): void {
     addVoxelSound.getComponent(AudioSource).playOnce()
   }
+
   public static playSubtractVoxelSound(): void {
     subtractVoxelSound.getComponent(AudioSource).playOnce()
   }
 
+  public static playEyeDropVoxelSound(): void {
+    eyeDropVoxelSound.getComponent(AudioSource).playOnce()
+  }
+
+  // Color
   public static setVoxelColor(): void {
     Manager.colorIndex < colors.length - 1
       ? (Manager.colorIndex = Manager.colorIndex + 1)
