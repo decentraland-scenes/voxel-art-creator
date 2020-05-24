@@ -1,4 +1,4 @@
-# Voxel Art Creator Example Scene
+# Voxel Art Creator
 
 _a screenshot of the voxel art creator running in preview._
 ![screenshot](https://github.com/decentraland-scenes/voxel-art-creator-example-scene/blob/master/screenshots/screenshot.png)
