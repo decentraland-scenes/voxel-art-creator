@@ -1,5 +1,6 @@
 import { Manager, materials, colors } from './manager'
 import { highlightMaterial, highlightedVoxelID } from './modules/highlighter'
+import { voxels } from './modules/voxel'
 
 // Global button events
 const input = Input.instance
@@ -18,4 +19,15 @@ input.subscribe('BUTTON_DOWN', ActionButton.SECONDARY, false, (): void => {
     engine.removeEntity(engine.entities[highlightedVoxelID])
     Manager.playSubtractVoxelSound()
   }
+
+  // Undo function
+  // if (voxels.length > 0) {
+  //   engine.removeEntity(voxels.pop())
+  //   Manager.playSubtractVoxelSound()
+  // }
+
+  // Clear function
+  // for (let voxel of voxels) {
+  //   engine.removeEntity(voxel)
+  // }
 })

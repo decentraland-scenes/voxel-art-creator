@@ -2,6 +2,7 @@ import { Manager, materials } from '../manager'
 
 export const VOXEL_SIZE = 0.25
 export const voxelsGroup: ComponentGroup = engine.getComponentGroup(Transform)
+export const voxels: Entity[] = [] // Stores all cubes in the scene
 
 export class Voxel extends Entity {
   private shape: BoxShape
@@ -42,6 +43,7 @@ export class Voxel extends Entity {
         scale: new Vector3(VOXEL_SIZE, VOXEL_SIZE, VOXEL_SIZE),
       })
     )
+    voxels.push(voxel)
     voxel.addComponent(materials[Manager.colorIndex])
   }
 

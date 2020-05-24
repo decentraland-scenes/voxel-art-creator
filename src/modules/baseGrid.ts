@@ -1,5 +1,5 @@
 import { Manager, materials } from '../manager'
-import { Voxel, VOXEL_SIZE } from './voxel'
+import { voxels, Voxel, VOXEL_SIZE } from './voxel'
 import { highlight } from './highlighter'
 import resources from '../resources'
 
@@ -17,6 +17,7 @@ function addBaseVoxel(x: number, y: number, z: number) {
       scale: new Vector3(VOXEL_SIZE, VOXEL_SIZE, VOXEL_SIZE),
     })
   )
+  voxels.push(voxel)
   voxel.addComponent(materials[Manager.colorIndex])
 }
 
