@@ -5,6 +5,9 @@ export const VOXEL_SIZE = 0.25
 export const voxelsGroup: ComponentGroup = engine.getComponentGroup(Transform)
 export const voxels: Entity[] = [] // Stores all cubes in the scene
 
+export const sceneMessageBus = new MessageBus()
+export let voxelNumbers: number[] = []
+
 export class Voxel extends Entity {
   private shape: BoxShape
 
@@ -15,15 +18,18 @@ export class Voxel extends Entity {
     this.addComponent(transform)
     this.shape = shape
 
+    let thisVoxel = this
+
     this.addComponent(
       new OnPointerDown(
         (e) => {
-          let position = this.getComponent(Transform).position
-          this.editVoxel(
-            position.x + e.hit.normal.x * VOXEL_SIZE,
-            position.y + e.hit.normal.y * VOXEL_SIZE,
-            position.z + e.hit.normal.z * VOXEL_SIZE
-          )
+          let position = thisVoxel.getComponent(Transform).position
+
+          sceneMessageBus.emit('editVoxel', {
+            position: position,
+            normal: e.hit.normal,
+            voxel: thisVoxel.uuid,
+          })
         },
         {
           button: ActionButton.POINTER,
@@ -82,3 +88,14 @@ export class Voxel extends Entity {
     }
   }
 }
+
+sceneMessageBus.on('editVoxel', (e) => {
+  engine.entities[e.voxel].editVoxel(
+    e.position.x + e.normal.x * VOXEL_SIZE,
+    e.position.y + e.normal.y * VOXEL_SIZE,
+    e.position.z + e.normal.z * VOXEL_SIZE
+  )
+  log('editing voxel')
+  //voxelNumbers[i] =
+  //changeVoxels()
+})
