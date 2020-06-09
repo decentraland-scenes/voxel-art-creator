@@ -1,18 +1,36 @@
 import { Manager, Mode, materials, colors } from '../manager'
 import { pickedVoxelID, pickerMaterial } from './picker'
+import { changeVoxels } from './serverHandler'
 
 export const VOXEL_SIZE = 0.25
 export const voxelsGroup: ComponentGroup = engine.getComponentGroup(Transform)
 export const voxels: Entity[] = [] // Stores all cubes in the scene
 
 export const sceneMessageBus = new MessageBus()
-export let voxelNumbers: number[] = []
+
+export type VoxelData = {
+  x: number
+  y: number
+  z: number
+  colIndex: number
+  mode: Mode
+}
+
+export let voxelData: VoxelData[] = []
 
 export class Voxel extends Entity {
   private shape: BoxShape
 
   constructor(shape: BoxShape, transform: Transform) {
-    super()
+    let entityName =
+      'x' +
+      transform.position.x.toString() +
+      'y' +
+      transform.position.y.toString() +
+      'z' +
+      transform.position.z.toString()
+    super(entityName)
+
     engine.addEntity(this)
     this.addComponent(shape)
     this.addComponent(transform)
@@ -29,6 +47,8 @@ export class Voxel extends Entity {
             position: position,
             normal: e.hit.normal,
             voxel: thisVoxel.uuid,
+            mode: Manager.activeMode,
+            colIndex: Manager.colorIndex,
           })
         },
         {
@@ -40,8 +60,8 @@ export class Voxel extends Entity {
   }
 
   // Edit a voxel depending on what mode the user is in
-  editVoxel(x: number, y: number, z: number) {
-    switch (Manager.activeMode) {
+  editVoxel(x: number, y: number, z: number, mode: Mode, color?: number) {
+    switch (mode) {
       case Mode.Add:
         log('Voxel added')
         Manager.playAddVoxelSound()
@@ -53,7 +73,7 @@ export class Voxel extends Entity {
           })
         )
         voxels.push(voxel)
-        voxel.addComponent(materials[Manager.colorIndex])
+        voxel.addComponent(materials[color])
         break
       case Mode.Subtract:
         this.subtractVoxel()
@@ -90,12 +110,17 @@ export class Voxel extends Entity {
 }
 
 sceneMessageBus.on('editVoxel', (e) => {
-  engine.entities[e.voxel].editVoxel(
-    e.position.x + e.normal.x * VOXEL_SIZE,
-    e.position.y + e.normal.y * VOXEL_SIZE,
-    e.position.z + e.normal.z * VOXEL_SIZE
-  )
+  let x = e.position.x + e.normal.x * VOXEL_SIZE
+  let y = e.position.y + e.normal.y * VOXEL_SIZE
+  let z = e.position.z + e.normal.z * VOXEL_SIZE
+  engine.entities[e.voxel].editVoxel(x, y, z, e.mode, e.colIndex)
   log('editing voxel')
-  //voxelNumbers[i] =
-  //changeVoxels()
+  voxelData.push({
+    x: x,
+    y: y,
+    z: z,
+    mode: e.mode,
+    colIndex: e.colIndex,
+  })
+  changeVoxels()
 })

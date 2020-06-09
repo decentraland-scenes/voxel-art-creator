@@ -1,6 +1,10 @@
 import { Manager, materials, colors, Mode } from './manager'
 import { pickerMaterial, pickedVoxelID } from './modules/picker'
-import { HUD } from "./modules/hud"
+import { HUD } from './modules/hud'
+import utils from '../node_modules/decentraland-ecs-utils/index'
+import { getVoxels } from './modules/serverHandler'
+import { Voxel, VOXEL_SIZE, voxels, VoxelData } from './modules/voxel'
+
 // import { voxels } from './modules/voxel'
 
 // UI Elements
@@ -57,3 +61,45 @@ input.subscribe('BUTTON_DOWN', ActionButton.SECONDARY, false, (): void => {
   //   engine.removeEntity(voxel)
   // }
 })
+
+/// update voxels periodically
+
+export let updateHandler = new Entity()
+engine.addEntity(updateHandler)
+
+updateHandler.addComponent(
+  new utils.Interval(10000, async function () {
+    let voxelList: VoxelData[] = await getVoxels()
+
+    for (let i = 0; i < voxelList.length; i++) {
+      switch (voxelList[i].mode) {
+        case Mode.Add:
+          const voxel = new Voxel(
+            this.shape,
+            new Transform({
+              position: new Vector3(
+                voxelList[i].x,
+                voxelList[i].y,
+                voxelList[i].z
+              ),
+              scale: new Vector3(VOXEL_SIZE, VOXEL_SIZE, VOXEL_SIZE),
+            })
+          )
+          voxels.push(voxel)
+          voxel.addComponent(materials[voxelList[i].colIndex])
+          break
+        case Mode.Subtract:
+          let voxelName =
+            'x' +
+            voxelList[i].x.toString() +
+            'y' +
+            voxelList[i].y.toString() +
+            'z' +
+            voxelList[i].z.toString()
+
+          engine.removeEntity(engine.entities[voxelName])
+          break
+      }
+    } //else third mode?????
+  })
+)

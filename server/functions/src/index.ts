@@ -5,9 +5,18 @@ const app = express()
 app.use(cors({ origin: true }))
 require('isomorphic-fetch')
 
-export type messageBoard = {
-  name: string
-  messages: string[]
+export enum Mode {
+  Add = 0,
+  Subtract = 1,
+  EyeDrop = 2,
+}
+
+export type VoxelData = {
+  x: number
+  y: number
+  z: number
+  colIndex: number
+  mode: Mode
 }
 
 app.get('/hello-world', (req: any, res: any) => {
@@ -15,9 +24,10 @@ app.get('/hello-world', (req: any, res: any) => {
 })
 
 app.get('/voxels', async (req: any, res: any) => {
-  let url = 'https://genesis-plaza.s3.us-east-2.amazonaws.com/mural/tiles.json'
+  let url =
+    'https://genesis-plaza.s3.us-east-2.amazonaws.com/voxels/voxels.json'
 
-  let currentMural: number[] = await getVoxelJSON(url)
+  let currentMural: VoxelData[] = await getVoxelJSON(url)
 
   return res.status(200).json({ tiles: currentMural })
 })
@@ -31,7 +41,7 @@ app.post('/update-voxels', async (req: any, res: any) => {
 })
 
 app.post('/reset-voxels', async (req: any, res: any) => {
-  let tiles: number[] = []
+  let tiles: VoxelData[] = []
 
   updateVoxelJSON(tiles)
 
@@ -51,7 +61,7 @@ AWS.config.update({
   region: 'us-east-2',
 })
 
-export async function updateVoxelJSON(tiles: number[]) {
+export async function updateVoxelJSON(tiles: VoxelData[]) {
   var upload = new AWS.S3.ManagedUpload({
     params: {
       Bucket: 'genesis-plaza',
@@ -74,7 +84,7 @@ export async function updateVoxelJSON(tiles: number[]) {
   )
 }
 
-export async function getVoxelJSON(url: string): Promise<number[]> {
+export async function getVoxelJSON(url: string): Promise<VoxelData[]> {
   try {
     let response = await fetch(url).then()
     let json = await response.json()

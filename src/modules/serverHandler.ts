@@ -1,4 +1,4 @@
-import { voxelNumbers } from './voxel'
+import { voxelData, VoxelData } from './voxel'
 import { setRealm, playerRealm } from './realmData'
 import utils from '../../node_modules/decentraland-ecs-utils/index'
 
@@ -7,7 +7,7 @@ export let fireBaseServer =
   'https://us-central1-genesis-plaza.cloudfunctions.net/app/'
 
 // get lastest mural state
-export async function getVoxels(): Promise<number[]> {
+export async function getVoxels(): Promise<VoxelData[]> {
   try {
     if (!playerRealm) {
       await setRealm()
@@ -31,7 +31,7 @@ export async function changeVoxels() {
     new utils.Delay(1000, async function () {
       try {
         let url = fireBaseServer + 'update-voxels?realm=' + playerRealm
-        let body = JSON.stringify({ voxels: voxelNumbers })
+        let body = JSON.stringify({ voxels: voxelData })
         let headers = {}
         let response = await fetch(url, {
           method: 'POST',
