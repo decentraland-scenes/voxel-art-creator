@@ -75,7 +75,7 @@ updateHandler.addComponent(
       switch (voxelList[i].mode) {
         case Mode.Add:
           const voxel = new Voxel(
-            this.shape,
+            new BoxShape(),
             new Transform({
               position: new Vector3(
                 voxelList[i].x,

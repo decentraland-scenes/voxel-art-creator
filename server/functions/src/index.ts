@@ -3,7 +3,6 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 app.use(cors({ origin: true }))
-require('isomorphic-fetch')
 
 export enum Mode {
   Add = 0,
@@ -24,28 +23,33 @@ app.get('/hello-world', (req: any, res: any) => {
 })
 
 app.get('/voxels', async (req: any, res: any) => {
+  let realm = req.query.realm
   let url =
-    'https://genesis-plaza.s3.us-east-2.amazonaws.com/voxels/voxels.json'
+    'https://soho-plaza.s3.us-east-2.amazonaws.com/voxels' +
+    realm +
+    '/voxels.json'
 
-  let currentMural: VoxelData[] = await getVoxelJSON(url)
+  let currentVoxels: VoxelData[] = await getVoxelJSON(url)
 
-  return res.status(200).json({ tiles: currentMural })
+  return res.status(200).json({ tiles: currentVoxels })
 })
 
 app.post('/update-voxels', async (req: any, res: any) => {
-  let tiles = req.body.tiles
+  let realm = req.query.realm
+  let voxels = req.body.voxels
 
-  updateVoxelJSON(tiles)
+  updateVoxelJSON(voxels, realm)
 
-  return res.status(200).send('Updated Mural')
+  return res.status(200).send('Updated Voxels')
 })
 
 app.post('/reset-voxels', async (req: any, res: any) => {
+  let realm = req.query.realm
   let tiles: VoxelData[] = []
 
-  updateVoxelJSON(tiles)
+  updateVoxelJSON(tiles, realm)
 
-  return res.status(200).send('Updated Mural')
+  return res.status(200).send('Updated Voxels')
 })
 
 //// AWS
@@ -61,11 +65,11 @@ AWS.config.update({
   region: 'us-east-2',
 })
 
-export async function updateVoxelJSON(tiles: VoxelData[]) {
+export async function updateVoxelJSON(tiles: VoxelData[], realm: string) {
   var upload = new AWS.S3.ManagedUpload({
     params: {
-      Bucket: 'genesis-plaza',
-      Key: 'voxels/voxels.json',
+      Bucket: 'soho-plaza',
+      Key: 'voxels/' + realm + '/voxels.json',
       Body: JSON.stringify({ tiles: tiles }),
       ACL: 'public-read',
       ContentType: 'application/json; charset=utf-8',
@@ -76,10 +80,10 @@ export async function updateVoxelJSON(tiles: VoxelData[]) {
 
   promise.then(
     function (data: any) {
-      console.log('Successfully uploaded mural JSON')
+      console.log('Successfully uploaded voxel JSON')
     },
     function (err: any) {
-      console.log('There was an error uploading mural json file: ', err.message)
+      console.log('There was an error uploading voxel json file: ', err.message)
     }
   )
 }
