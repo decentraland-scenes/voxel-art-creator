@@ -34,7 +34,11 @@ baseGrid.addComponent(
     (e) => {
       if (Manager.activeMode == Mode.Add) {
         let transform = picker.getComponent(Transform).position
-        addBaseVoxel(transform.x, VOXEL_SIZE / 2 + 0.1, transform.z) // Base grid height is 0.1
+        addBaseVoxel(
+          transform.x,
+          VOXEL_SIZE / 2 + 0.1 + baseGrid.getComponent(Transform).position.y, // Offset voxel based on grid thickness (0.1m) and height 
+          transform.z
+        ) 
       }
     },
     {
