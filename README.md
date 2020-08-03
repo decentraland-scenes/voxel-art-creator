@@ -25,7 +25,7 @@ This scen shows you:
 Download and install the Decentraland CLI by running the following command:
 
 ```bash
-npm i -g decentraland
+$ npm i -g decentraland
 ```
 
 **Previewing the scene**
@@ -33,7 +33,7 @@ npm i -g decentraland
 Download this example and navigate to its directory, then run:
 
 ```
-$:  dcl start
+$  dcl start
 ```
 
 Any dependencies are installed and then the CLI opens the scene in a new browser tab.
