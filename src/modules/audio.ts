@@ -3,8 +3,7 @@ export class Audio extends Entity {
     super()
     engine.addEntity(this)
     this.addComponent(new Transform())
-    this.getComponent(Transform).position = Camera.instance.position
+    this.setParent(Attachable.PLAYER)
     this.addComponent(new AudioSource(audio))
   }
 }
-
