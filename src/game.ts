@@ -1,7 +1,7 @@
 import { Manager, materials, colors, Mode } from './manager'
 import { pickerMaterial, pickedVoxelID } from './modules/picker'
 import { HUD } from './modules/hud'
-import utils from '../node_modules/decentraland-ecs-utils/index'
+import * as utils from '@dcl/ecs-scene-utils'
 import { getVoxels } from './modules/serverHandler'
 import { Voxel, VOXEL_SIZE, voxels, VoxelData } from './modules/voxel'
 

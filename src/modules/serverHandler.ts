@@ -1,6 +1,6 @@
 import { voxelData, VoxelData } from './voxel'
 import { setRealm, playerRealm } from './realmData'
-import utils from '../../node_modules/decentraland-ecs-utils/index'
+import * as utils from '@dcl/ecs-scene-utils'
 
 export let awsServer = 'https://soho-plaza.s3.us-east-2.amazonaws.com/'
 export let fireBaseServer =
