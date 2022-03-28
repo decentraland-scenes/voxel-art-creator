@@ -5,11 +5,11 @@ export default {
     eyeDrop: new AudioClip('sounds/eyeDropVoxel.mp3')
   },
   models: {
-    baseGrid: new GLTFShape('models/baseGrid.glb'),
+    baseGrid: new GLTFShape('models/baseGrid.glb')
   },
   icons: {
     add: new Texture('images/addIcon.png'),
     subtract: new Texture('images/subtractIcon.png'),
-    eyeDrop: new Texture('images/eyeDropIcon.png'),
-  },
+    eyeDrop: new Texture('images/eyeDropIcon.png')
+  }
 }

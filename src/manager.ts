@@ -27,7 +27,7 @@ export const colors: Color3[] = [
   Color3.FromInts(0, 106, 122), // Blue
   Color3.FromInts(135, 90, 149), // Purple
   Color3.FromInts(232, 108, 210), // Pink
-  Color3.FromInts(34, 34, 34), // Black
+  Color3.FromInts(34, 34, 34) // Black
 ]
 
 export const materials: Material[] = []
@@ -42,7 +42,6 @@ for (let i = 0; i < colors.length; i++) {
 }
 
 export class Manager {
-
   public static colorIndex: number = 0
   public static activeMode = Mode.Add
 

@@ -2,8 +2,8 @@ import { voxelData, VoxelData } from './voxel'
 import { setRealm, playerRealm } from './realmData'
 import * as utils from '@dcl/ecs-scene-utils'
 
-export let awsServer = 'https://soho-plaza.s3.us-east-2.amazonaws.com/'
-export let fireBaseServer =
+export const awsServer = 'https://soho-plaza.s3.us-east-2.amazonaws.com/'
+export const fireBaseServer =
   'https://us-central1-soho-plaza.cloudfunctions.net/app/'
 
 // get lastest mural state
@@ -12,9 +12,9 @@ export async function getVoxels(): Promise<VoxelData[]> {
     if (!playerRealm) {
       await setRealm()
     }
-    let url = awsServer + 'voxels/' + playerRealm + '/voxels.json'
-    let response = await fetch(url).then()
-    let json = await response.json()
+    const url = awsServer + 'voxels/' + playerRealm + '/voxels.json'
+    const response = await fetch(url).then()
+    const json = await response.json()
     return json.tiles
   } catch {
     log('error fetching from AWS server')
@@ -30,13 +30,13 @@ export async function changeVoxels() {
     // Only send request if no more changes come over the next second
     new utils.Delay(1000, async function () {
       try {
-        let url = fireBaseServer + 'update-voxels?realm=' + playerRealm
-        let body = JSON.stringify({ voxels: voxelData })
-        let headers = {}
-        let response = await fetch(url, {
+        const url = fireBaseServer + 'update-voxels?realm=' + playerRealm
+        const body = JSON.stringify({ voxels: voxelData })
+        const headers = {}
+        const response = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: body,
+          body: body
         })
         return response.json()
       } catch {
@@ -47,5 +47,5 @@ export async function changeVoxels() {
 }
 
 // dummy entity to throttle the sending of change requests
-export let voxelChanger = new Entity()
+export const voxelChanger = new Entity()
 engine.addEntity(voxelChanger)

@@ -45,7 +45,7 @@ input.subscribe('BUTTON_DOWN', ActionButton.SECONDARY, false, (): void => {
   log('Color: ', materials[Manager.colorIndex].albedoColor)
 
   // Delete function
-  // if (highlightedVoxelID != null) {
+  // if (highlightedVoxelID !== null) {
   //   engine.removeEntity(engine.entities[highlightedVoxelID])
   //   Manager.playSubtractVoxelSound()
   // }
@@ -64,12 +64,12 @@ input.subscribe('BUTTON_DOWN', ActionButton.SECONDARY, false, (): void => {
 
 /// update voxels periodically
 
-export let updateHandler = new Entity()
+export const updateHandler = new Entity()
 engine.addEntity(updateHandler)
 
 updateHandler.addComponent(
   new utils.Interval(10000, async function () {
-    let voxelList: VoxelData[] = await getVoxels()
+    const voxelList: VoxelData[] = await getVoxels()
 
     for (let i = 0; i < voxelList.length; i++) {
       switch (voxelList[i].mode) {
@@ -82,14 +82,14 @@ updateHandler.addComponent(
                 voxelList[i].y,
                 voxelList[i].z
               ),
-              scale: new Vector3(VOXEL_SIZE, VOXEL_SIZE, VOXEL_SIZE),
+              scale: new Vector3(VOXEL_SIZE, VOXEL_SIZE, VOXEL_SIZE)
             })
           )
           voxels.push(voxel)
           voxel.addComponent(materials[voxelList[i].colIndex])
           break
         case Mode.Subtract:
-          let voxelName =
+          const voxelName =
             'x' +
             voxelList[i].x.toString() +
             'y' +

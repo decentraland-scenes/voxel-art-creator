@@ -16,13 +16,13 @@ export type VoxelData = {
   mode: Mode
 }
 
-export let voxelData: VoxelData[] = []
+export const voxelData: VoxelData[] = []
 
 export class Voxel extends Entity {
   private shape: BoxShape
 
   constructor(shape: BoxShape, transform: Transform) {
-    let entityName =
+    const entityName =
       'x' +
       transform.position.x.toString() +
       'y' +
@@ -36,12 +36,12 @@ export class Voxel extends Entity {
     this.addComponent(transform)
     this.shape = shape
 
-    let thisVoxel = this
+    const thisVoxel = this
 
     this.addComponent(
       new OnPointerDown(
         (e) => {
-          let position = thisVoxel.getComponent(Transform).position
+          const position = thisVoxel.getComponent(Transform).position
 
           sceneMessageBus.emit('editVoxel', {
             position: position,
@@ -88,7 +88,7 @@ export class Voxel extends Entity {
 
   // Subtract a voxel from the scene
   subtractVoxel(): void {
-    if (pickedVoxelID != null) {
+    if (pickedVoxelID !== null) {
       engine.removeEntity(engine.entities[pickedVoxelID])
       Manager.playSubtractVoxelSound()
     }
@@ -96,11 +96,11 @@ export class Voxel extends Entity {
 
   // Eye drop a voxel from the scene
   eyeDropVoxel(): void {
-    if (pickedVoxelID != null) {
-      let eyeDroppedVoxel = engine.entities[pickedVoxelID]
+    if (pickedVoxelID !== null) {
+      const eyeDroppedVoxel = engine.entities[pickedVoxelID]
       for (let i = 0; i < colors.length; i++) {
         Manager.playEyeDropVoxelSound()
-        if (colors[i] == eyeDroppedVoxel.getComponent(Material).albedoColor) {
+        if (colors[i] === eyeDroppedVoxel.getComponent(Material).albedoColor) {
           Manager.colorIndex = i
           pickerMaterial.albedoColor = colors[Manager.colorIndex]
         }
@@ -110,10 +110,11 @@ export class Voxel extends Entity {
 }
 
 sceneMessageBus.on('editVoxel', (e) => {
-  let x = e.position.x + e.normal.x * VOXEL_SIZE
-  let y = e.position.y + e.normal.y * VOXEL_SIZE
-  let z = e.position.z + e.normal.z * VOXEL_SIZE
-  engine.entities[e.voxel].editVoxel(x, y, z, e.mode, e.colIndex)
+  const x = e.position.x + e.normal.x * VOXEL_SIZE
+  const y = e.position.y + e.normal.y * VOXEL_SIZE
+  const z = e.position.z + e.normal.z * VOXEL_SIZE
+  let voxel = engine.entities[e.voxel] as Voxel
+  voxel.editVoxel(x, y, z, e.mode, e.colIndex)
   log('editing voxel')
   voxelData.push({
     x: x,
@@ -122,5 +123,5 @@ sceneMessageBus.on('editVoxel', (e) => {
     mode: e.mode,
     colIndex: e.colIndex,
   })
-  changeVoxels()
+  changeVoxels().catch((error) => log(error))
 })

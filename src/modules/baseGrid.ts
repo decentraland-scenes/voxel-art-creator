@@ -14,7 +14,7 @@ function addBaseVoxel(x: number, y: number, z: number) {
     voxelShape,
     new Transform({
       position: new Vector3(x, y, z),
-      scale: new Vector3(VOXEL_SIZE, VOXEL_SIZE, VOXEL_SIZE),
+      scale: new Vector3(VOXEL_SIZE, VOXEL_SIZE, VOXEL_SIZE)
     })
   )
   voxels.push(voxel)
@@ -26,24 +26,24 @@ const baseGrid = new Entity()
 baseGrid.addComponent(resources.models.baseGrid)
 baseGrid.addComponent(
   new Transform({
-    position: new Vector3(0, 0, 0),
+    position: new Vector3(0, 0, 0)
   })
 )
 baseGrid.addComponent(
   new OnPointerDown(
     (e) => {
-      if (Manager.activeMode == Mode.Add) {
-        let transform = picker.getComponent(Transform).position
+      if (Manager.activeMode === Mode.Add) {
+        const transform = picker.getComponent(Transform).position
         addBaseVoxel(
           transform.x,
-          VOXEL_SIZE / 2 + 0.1 + baseGrid.getComponent(Transform).position.y, // Offset voxel based on grid thickness (0.1m) and height 
+          VOXEL_SIZE / 2 + 0.1 + baseGrid.getComponent(Transform).position.y, // Offset voxel based on grid thickness (0.1m) and height
           transform.z
-        ) 
+        )
       }
     },
     {
       button: ActionButton.POINTER,
-      showFeedback: false,
+      showFeedback: false
     }
   )
 )
